@@ -18,10 +18,14 @@ $ scp target/aarch64-unknown-linux-gnu/release/interface user@sbc-ip:~
 ```
 The `interface` executable should now present on the remote machine may need to be run as superuser at the start in order to access the IMU over I2C. In addition, the visualization app on the development computer should be running before starting the IMU interface code; the Bissel Node has a small grace period before the connection will time out, but will eventually error out if connection is not established relatively quickly. 
 
-Also consider taking a look at: 
+## Resources
+
+Also, consider checking out the following: 
 - [Bissel](https://github.com/quietlychris/bissel): The middleware being used to transmit state messages
 - [Bevy](https://bevyengine.org): The ECS game engine used to create the orientation visualizer
 - [Turtlesim](https://github.com/quietlychris/turtlesim): A ROS2 turtlesim clone built using the Bissel middleware and Bevy
+
+or, [me](https://cmoran.xyz)! Is your team interested Bissel, adding some autonomy to your project, or maybe just having another robotics engineer that likes making highly-reliable systems or figuring out why your system suddenly isn't working? I'm currently available for hire in either remote or in-person positions; feel free to check out some of my [past work](https://cmoran.xyz/cmoran.pdf) and reach out!
 
 ## License
 
