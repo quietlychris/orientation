@@ -1,0 +1,3 @@
+target/
+build_and_send.sh
+Cargo.lock
