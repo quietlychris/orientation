@@ -1,15 +1,15 @@
 use bevy::prelude::*;
-use bissel::{Host as BisselHost, Node as BisselNode, *};
+use meadow::{Host as MeadowHost, Node as MeadowNode, *};
 
 #[derive(Debug, Component)]
-pub struct Host(pub BisselHost);
+pub struct Host(pub MeadowHost);
 #[derive(Debug, Component)]
-pub struct Node<T: Message>(pub BisselNode<Subscription, T>);
+pub struct Node<T: Message>(pub MeadowNode<Subscription, T>);
 
 #[derive(Component, Default)]
 struct Cube;
 
-pub const BISSEL_ADDR: &str = "192.168.8.105:25000";
+pub const MEADOW_ADDR: &str = "192.168.8.105:25000";
 
 fn main() {
     App::new()
@@ -19,7 +19,7 @@ fn main() {
         })
         .add_plugins(DefaultPlugins)
         .add_startup_system(setup)
-        .add_startup_system(bissel_host)
+        .add_startup_system(meadow_host)
         .add_startup_system(imu_recv_node)
         .add_system(rotate_cube)
         .add_system(bevy::input::system::exit_on_esc_system)
@@ -86,21 +86,20 @@ fn rotate_cube(
     let (_cube, _transform, mut global_transform) = query.single_mut();
     let imu_recv_node = imu_node_query.single_mut();
 
-    if let Ok(Some(quat)) = imu_recv_node.0.get_subscribed_data() {
+    if let Ok(quat) = imu_recv_node.0.get_subscribed_data() {
         global_transform.rotation = quat;
     }
 }
 
-fn bissel_host(mut commands: Commands) {
-    // Setup our Bissel host on WiFi
+fn meadow_host(mut commands: Commands) {
+    // Setup our meadow host on WiFi
     // The network interface of your WiFi adapter may be different; use `ifconfig` to check
-    let bissel_host: BisselHost = HostConfig::new("wlp3s0")
-        .socket_num(25_000) // Port 25000 is the default address
-        .store_filename("store") // sled DBs allow persistence across reboots
+    let meadow_host: MeadowHost = HostConfig::default()
+        .with_udp_config(Some(host::UdpConfig::default("wlp5s0")))
         .build()
         .expect("Couldn't create a Host");
 
-    let mut host = Host(bissel_host);
+    let mut host = Host(meadow_host);
     host.0.start().unwrap();
 
     commands.spawn().insert(host);
@@ -110,16 +109,14 @@ fn bissel_host(mut commands: Commands) {
 fn imu_recv_node(mut commands: Commands) {
     // Sleep for a second while setting up to allow the Host to fully get setup
     std::thread::sleep(std::time::Duration::from_millis(500));
-    let addr = BISSEL_ADDR.parse::<std::net::SocketAddr>().unwrap();
-    let bissel_node = NodeConfig::<Quat>::new("IMU_SUBSCRIPTION")
+    let meadow_node = NodeConfig::<Quat>::new("IMU_SUBSCRIPTION")
         .topic("quaternion")
-        .host_addr(addr)
         .build()
         .unwrap()
         .subscribe(std::time::Duration::from_millis(50)) // Run subscriber at 20 Hz
         .unwrap();
-    // Wrap our Bissel node in the NewType pattern for Bevy
-    let imu_node = Node(bissel_node);
+    // Wrap our meadow node in the NewType pattern for Bevy
+    let imu_node = Node(meadow_node);
     // Each node establishes a TCP connection with central host
     println!("IMU_RECV connected");
 

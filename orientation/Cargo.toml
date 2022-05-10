@@ -9,4 +9,4 @@ edition = "2021"
 bevy = "0.6"
 mint = {version = "0.5", features = ["serde"]}
 serde = {version = "1", features = ["derive"]}
-bissel = "0.2"
+meadow = { git = "https://github.com/quietlychris/meadow.git", branch = "master"}

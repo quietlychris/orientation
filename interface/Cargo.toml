@@ -11,4 +11,4 @@ glam = {version = "0.20.2", features = ["serde"]}
 serde = {version = "1", features = ["derive"]}
 bno055 = "0.3.3"
 linux-embedded-hal = "0.3"
-bissel = "0.2"
+meadow = { git = "https://github.com/quietlychris/meadow.git", branch = "master"}
