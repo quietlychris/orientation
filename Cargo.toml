@@ -10,7 +10,6 @@ glam = {version = "0.21", features = ["serde"]}
 bno055 = "0.3.3"
 linux-embedded-hal = "0.3"
 serde = {version = "1", features = ["derive"]}
-# meadow = { git = "https://github.com/quietlychris/meadow.git", branch = "main"}
-meadow = {path = "../meadow"}
+meadow = { git = "https://github.com/quietlychris/meadow.git", branch = "main"}
 
 
