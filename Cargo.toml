@@ -1,0 +1,16 @@
+[package]
+name = "orientation"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+bevy = "0.8"
+mint = {version = "0.5", features = ["serde"]}
+glam = {version = "0.21", features = ["serde"]}
+bno055 = "0.3.3"
+linux-embedded-hal = "0.3"
+serde = {version = "1", features = ["derive"]}
+# meadow = { git = "https://github.com/quietlychris/meadow.git", branch = "main"}
+meadow = {path = "../meadow"}
+
+
