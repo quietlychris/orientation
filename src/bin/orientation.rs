@@ -12,7 +12,6 @@ struct Cube;
 // pub const HOST_ADDR: &str = "192.168.8.121:25000";
 pub const HOST_ADDR: &str = "127.0.0.1:25000";
 
-
 fn main() {
     App::new()
         .insert_resource(AmbientLight {
@@ -84,7 +83,7 @@ fn rotate_cube(
 ) {
     // Since we're directly reading/writing the GlobalTransform, we don't need
     // the timestep; otherwise, this would be useful
-    let (cube, mut transform) = query.single_mut();
+    let (_cube, mut transform) = query.single_mut();
     let imu_recv_node = imu_node_query.single_mut();
 
     // let (mut scale, mut rotation, mut translation): (Vec3, Quat, Vec3);
@@ -123,7 +122,7 @@ fn imu_recv_node(mut commands: Commands) {
     // Wrap our meadow node in the NewType pattern for Bevy
     let imu_node = Node(meadow_node);
     // Each node establishes a TCP connection with central host
-    println!("IMU_RECV connected");
+    println!("{} connected",&imu_node.0.name);
 
     commands.spawn().insert(imu_node);
 }
