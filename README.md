@@ -4,17 +4,18 @@ This is a demonstration of real-time visualization of the attitude of a [BNO055]
 
 <p align="center"><img src="assets/orientation.gif" alt="screenshot" width="50%"/></p>
 
-To enable quick builds, compile the `orientation` module using dynamic linking
+The display code can be run using
 ```sh
-$ cd orientation
-$ RUST_LOG=OFF cargo run --features bevy/dynamic
+$ cd display
+$ cargo run
 ```
+which needs to happen prior to running the publisher on the remote side. 
 
 For cross-compiling the BNO055 IMU interface code for the Odroid-C4 SBC:
 ```sh
-$ cd interface
-$ cross build --release --target aarch64-unknown-linux-gnu
-$ scp target/aarch64-unknown-linux-gnu/release/interface user@sbc-ip:~
+$ cd remote
+$ cross build --release # We have a Cross.toml file specifying the aarch64-unknown-linux-gnu
+$ scp target/aarch64-unknown-linux-gnu/release/remote user@sbc-ip:~
 ```
 The `interface` executable should now present on the remote machine may need to be run as superuser at the start in order to access the IMU over I2C. In addition, the visualization app on the development computer should be running before starting the IMU interface code; the meadow Node has a small grace period before the connection will time out, but will eventually error out if connection is not established relatively quickly. 
 

@@ -9,7 +9,6 @@ pub struct Node<T: Message>(pub MeadowNode<Subscription, T>);
 #[derive(Component, Default)]
 struct Cube;
 
-// pub const HOST_ADDR: &str = "192.168.8.121:25000";
 pub const HOST_ADDR: &str = "127.0.0.1:25000";
 
 fn main() {
@@ -61,9 +60,9 @@ fn setup(
         ..Default::default()
     };
 
-    commands.spawn_bundle(cube).insert(Cube);
+    commands.spawn(cube).insert(Cube);
 
-    commands.spawn_bundle(Camera3dBundle {
+    commands.spawn(Camera3dBundle {
         transform: Transform::from_xyz(6.0, 0.0, 0.0)
             .looking_at(Vec3::new(0.0, 0.0, 0.0), Vec3::new(0.0, 0.0, 1.0)),
         ..Default::default()
@@ -104,7 +103,7 @@ fn meadow_host(mut commands: Commands) {
     let mut host = Host(meadow_host);
     host.0.start().unwrap();
 
-    commands.spawn().insert(host);
+    commands.spawn(host);
 }
 
 // Create a node for managing the IMU
@@ -122,7 +121,7 @@ fn imu_recv_node(mut commands: Commands) {
     // Wrap our meadow node in the NewType pattern for Bevy
     let imu_node = Node(meadow_node);
     // Each node establishes a TCP connection with central host
-    println!("{} connected",&imu_node.0.name);
+    println!("{} connected", &imu_node.0.name);
 
-    commands.spawn().insert(imu_node);
+    commands.spawn(imu_node);
 }

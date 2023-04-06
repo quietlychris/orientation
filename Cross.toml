@@ -1,6 +1,0 @@
-[target.aarch64-unknown-linux-gnu]
-pre-build = [
-    "dpkg --add-architecture $CROSS_DEB_ARCH",
-    "apt-get update && apt-get install -y --no-install-recommends apt-utils",
-    "apt-get install --assume-yes pkg-config g++ libasound2-dev libudev-dev"
-]

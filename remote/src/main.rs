@@ -42,7 +42,7 @@ fn main() {
     */
     println!("Connected to IMU! First reading: {:?}", imu.euler_angles());
 
-    let host_addr = "192.168.8.121:25000"
+    let host_addr = "192.168.8.122:25000"
         .parse::<std::net::SocketAddr>()
         .unwrap();
 
@@ -57,7 +57,7 @@ fn main() {
 
     // These are sensor fusion reading using the mint crate that the state will be read into
     // We'll initialize our EulerAngle variable before the loop, but won't assign data yet
-    
+
     let mut euler: EulerAngles<f32, ()>;
     loop {
         match imu.euler_angles() {
@@ -74,7 +74,7 @@ fn main() {
                 // directly reading the quaternion; it's easier for people to reason about Euler Angles
                 // than it is about Quaternions, which are a fairly complex mathematical construct
                 // However, since Bevy uses the Quaternion, we'll do the conversion before sending it over
-                let quat: Quat = Quat::from_euler(EulerRot::XYZ, a, -b, -c);
+                let quat: Quat = Quat::from_euler(EulerRot::XYZ, -a, b, c);
                 // We *don't* want to stop publishing if there's an error
                 match imu_node.publish_udp(quat) {
                     Ok(_) => (),
@@ -91,5 +91,4 @@ fn main() {
             }
         }
     }
-    
 }
